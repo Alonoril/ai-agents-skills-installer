@@ -1,0 +1,4 @@
+interface:
+  display_name: "Link Repo Skills"
+  short_description: "Link stored skills into project repos"
+  default_prompt: "Use $link-repo-skills to symlink selected skills from ~/.ai-agents/skills into this repo .agents/skills."

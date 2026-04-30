@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install Agent Skills"
+  short_description: "Install skills into a neutral local store"
+  default_prompt: "Use $install-agent-skills to install or update agent skills in ~/.ai-agents/skills without enabling them globally."
