@@ -4,6 +4,7 @@
 
 - `$install-agent-skills`：把 skill 仓库安装或更新到中立目录 `~/.ai-agents/skills`
 - `$link-repo-skills`：把中立目录里的具体 skill 按需链接到某个项目的 `.agents/skills`
+- `$install-skill`：配合`$install-agent-skills`使用，把 skill 仓库安装或更新到中立目录 `~/.ai-agents/skills`
 
 核心原则：
 
@@ -233,3 +234,62 @@ python3 /Users/${user_name}/.codex/skills/link-repo-skills/scripts/link_repo_ski
   --clear \
   --dry-run
 ```
+
+## install-skill
+
+支持两个占位符入参：
+
+- {skill}
+- {codex_adapt}：默认等同于 auto
+    - 会自动扫描安装后的 SKILL.md，如果发现这些 Claude Code 特征，就生成 Codex 适配副本：
+
+    ```shell
+        - Claude Code
+        - Claude
+        - CLAUDE.md
+        - TodoWrite
+        - Read tool
+        - Edit tool
+        - MultiEdit tool
+        - WebFetch
+        - WebSearch
+        - ~/.claude/skills
+    ```
+
+    - 如果检测到需要适配，会创建：
+
+    ```shell
+      ~/.ai-agents/skills/<installed-name>-codex
+    ```
+
+    - 如果没有检测到 Claude Code 特征，就保持原集合不变。仍然可以显式覆盖：
+
+    ```shell
+      --codex-adapt true
+      --codex-adapt false
+      --codex-adapt auto
+    ```
+
+### 使用方式：
+
+使用 $install-skill 安装 {skill}，codex_adapt={codex_adapt}
+
+- 例如：
+
+    ```bash
+    使用 $install-skill 安装 addyosmani/agent-skills，codex_adapt=false
+    ```
+
+- Claude Code 专属 skill：
+
+    ```bash
+    使用 $install-skill 安装 owner/repo，codex_adapt=true
+    ```
+
+### 实现细节：
+
+- 默认安装到 ~/.ai-agents/skills
+- 基础安装始终调用已有 $install-agent-skills
+- codex_adapt=false：只安装或更新原集合
+- codex_adapt=true：生成 <installed-name>-codex 副本，保留原始集合不动
+- 适配会规范 SKILL.md frontmatter，并替换常见 Claude Code 术语，如 CLAUDE.md -> AGENTS.md、TodoWrite -> update_plan、~/.claude/skills -> ~/.ai-agents/skills

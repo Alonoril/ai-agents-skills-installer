@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install Skill"
+  short_description: "Install skills with optional Codex adaptation"
+  default_prompt: "Use $install-skill to install {skill} with codex_adapt={codex_adapt}."
